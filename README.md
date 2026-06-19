@@ -4,8 +4,10 @@ A private web app for tracking your dogs' health: weights, vaccines (with remind
 medications and dosing, vet visits, and records. Built as a mobile-friendly PWA so it
 works from your phone's home screen without a separate "app."
 
-Status: **design complete, not yet built.** This repo currently contains the design docs
-produced from a planning interview on 2026-06-19.
+Status: **Phase 0 in progress — app scaffolded.** Next.js 16 (App Router, TypeScript,
+Tailwind) is set up and builds clean; design docs are complete. Still to do in Phase 0:
+PWA config, Supabase project + client wiring, and a first Vercel deploy. See
+[`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## What it does (agreed scope)
 
@@ -44,7 +46,17 @@ produced from a planning interview on 2026-06-19.
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) — the three build phases and concrete tasks.
 - [`docs/DECISIONS.md`](docs/DECISIONS.md) — every design decision + the rationale behind it.
 
+## Local development
+
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+```
+
 ## Next step
 
-Start **Phase 1** (see the roadmap): scaffold the Next.js + Supabase project, set up
-auth + household + invites, then dog profiles, weights, vaccines, and the Due-soon dashboard.
+Finish **Phase 0** (see the roadmap): add the PWA manifest/service worker, create the
+Supabase project and wire up `lib/supabase/` clients, then deploy a hello-world to Vercel
+and confirm "Add to Home Screen" works on your phone. Then on to **Phase 1**
+(auth + household + invites → dogs, weights, vaccines, Due-soon dashboard).

@@ -4,9 +4,13 @@ Phased delivery so the app is usable early. Each phase ends with something you c
 use day-to-day.
 
 ## Phase 0 — Foundation
-- [ ] Scaffold Next.js app (App Router, TypeScript), configure as an installable **PWA**
-      (manifest + service worker + icons).
+- [x] Scaffold Next.js app (Next.js 16, App Router, TypeScript, Tailwind, ESLint, Turbopack);
+      builds clean. _(2026-06-19)_
+- [x] Project structure: `app/`, `components/`, `lib/`, `supabase/{migrations,functions}/`;
+      seed framework-free `lib/units.ts` (lbs↔kg); git initialized with initial commit. _(2026-06-19)_
+- [ ] Configure as an installable **PWA** (manifest + service worker + icons).
 - [ ] Create Supabase project; wire up env vars locally and on Vercel.
+- [ ] Scaffold `lib/supabase/` clients (browser + server).
 - [ ] Deploy a hello-world to Vercel; confirm "Add to Home Screen" works on your phone.
 - [ ] Set up the `profiles` mirror + base auth (email + Google).
 
