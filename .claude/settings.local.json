@@ -10,7 +10,8 @@
       "Bash(npx -v)",
       "Bash(echo \"npx: $\\(npx -v 2>/dev/null || echo MISSING\\)\")",
       "Bash(git --version)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(npm test *)"
     ]
   }
 }
