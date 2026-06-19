@@ -4,10 +4,10 @@ A private web app for tracking your dogs' health: weights, vaccines (with remind
 medications and dosing, vet visits, and records. Built as a mobile-friendly PWA so it
 works from your phone's home screen without a separate "app."
 
-Status: **Phase 0 in progress — PWA configured.** Next.js 16 (App Router, TypeScript,
-Tailwind + shadcn/ui) is set up and builds clean; PWA manifest, service worker, and icons
-are in place. Still to do in Phase 0: Supabase project + client wiring, and a first Vercel
-deploy. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Status: **Phase 0 complete.** App is live on Vercel, installable as a PWA, and has working
+email auth (sign up / log in / sign out). Supabase Postgres is wired up with a `profiles`
+table and row-level security. Starting **Phase 1** next: households, dog profiles, weights,
+vaccines, and the "Due soon" dashboard. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## What it does (agreed scope)
 
@@ -57,7 +57,5 @@ npm run generate-icons  # regenerate PWA icons from public/paw.svg (run after ed
 
 ## Next step
 
-Finish **Phase 0** (see the roadmap): create the Supabase project, wire up env vars and
-`lib/supabase/` clients, then deploy a hello-world to Vercel and confirm "Add to Home
-Screen" works on your phone. Then on to **Phase 1** (auth + household + invites → dogs,
-weights, vaccines, Due-soon dashboard).
+**Phase 1** — households + invites, dog profiles, weight logging (with trend chart),
+vaccine tracking with auto next-due dates, and a color-coded "Due soon" dashboard.
