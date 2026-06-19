@@ -10,9 +10,9 @@ use day-to-day.
       seed framework-free `lib/units.ts` (lbs↔kg); git initialized with initial commit. _(2026-06-19)_
 - [x] Configure as an installable **PWA** (manifest + service worker + icons); shadcn/ui +
       next-themes dark/light mode bootstrapped. _(2026-06-19)_
-- [ ] Create Supabase project; wire up env vars locally and on Vercel.
+- [x] Create Supabase project; wire up env vars locally and on Vercel. _(2026-06-19)_
 - [x] Scaffold `lib/supabase/` clients (browser + server). _(2026-06-19)_
-- [ ] Deploy to Vercel; confirm "Add to Home Screen" works on your phone.
+- [x] Deploy to Vercel; confirmed "Add to Home Screen" works on phone. _(2026-06-19)_
 - [x] Set up the `profiles` mirror + base auth (email). Google OAuth later. _(2026-06-19)_
 
 ## Phase 1 — Usable MVP (vaccines + weights)

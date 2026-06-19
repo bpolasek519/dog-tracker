@@ -28,8 +28,13 @@ No test suite is configured yet (Phase 1+).
 - `scripts/` — Node.js dev scripts (excluded from ESLint; use CommonJS `require`)
 
 **Supabase client usage:**
-- Browser code: anon key (public, RLS applies automatically via user JWT)
-- Server actions / Route Handlers: service-role key (bypasses RLS — keep server-side only, never expose to browser)
+- Browser / Client Components: `createClient()` from `lib/supabase/client.ts` — uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- Server Components / Server Actions / Route Handlers: `createClient()` from `lib/supabase/server.ts` — session-aware via cookies, RLS still applies
+- Secret key (`SUPABASE_SECRET_KEY`) is wired in `.env` / Vercel env vars for future admin operations that need to bypass RLS; not yet used in code
+
+**API keys:** Using Supabase's new non-JWT key format (`sb_publishable_...` / `sb_secret_...`). The legacy `anon` and `service_role` JWT keys are not used. Exception: Supabase Edge Functions (Phase 2 cron) only support JWT verification — when we add those, we'll need the legacy `service_role` key as an additional env var.
+
+**Route protection:** `proxy.ts` (Next.js 16 convention — previously `middleware.ts`) refreshes the session cookie on every request and redirects unauthenticated users to `/login`.
 
 ## Data & Units
 
@@ -55,4 +60,4 @@ Icon source is `public/paw.svg`. After editing the SVG, run `npm run generate-ic
 
 ## Project Status
 
-Phase 0 PWA config is complete (manifest, service worker, icons, shadcn/ui, dark mode). Still to do: Supabase project + `lib/supabase/` clients + Vercel deploy. Phase 1 (MVP: auth, households, dogs, weights, vaccines, dashboard) is next. See `docs/ROADMAP.md`.
+**Phase 0 is complete.** Supabase project live, email auth working, `profiles` table + trigger deployed, app running on Vercel, PWA installable on phone. Phase 1 (households, dogs, weights, vaccines, "Due soon" dashboard) is next. See `docs/ROADMAP.md`.
