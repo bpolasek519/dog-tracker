@@ -11,9 +11,9 @@ use day-to-day.
 - [x] Configure as an installable **PWA** (manifest + service worker + icons); shadcn/ui +
       next-themes dark/light mode bootstrapped. _(2026-06-19)_
 - [ ] Create Supabase project; wire up env vars locally and on Vercel.
-- [ ] Scaffold `lib/supabase/` clients (browser + server).
-- [ ] Deploy a hello-world to Vercel; confirm "Add to Home Screen" works on your phone.
-- [ ] Set up the `profiles` mirror + base auth (email + Google).
+- [x] Scaffold `lib/supabase/` clients (browser + server). _(2026-06-19)_
+- [ ] Deploy to Vercel; confirm "Add to Home Screen" works on your phone.
+- [x] Set up the `profiles` mirror + base auth (email). Google OAuth later. _(2026-06-19)_
 
 ## Phase 1 — Usable MVP (vaccines + weights)
 **Goal: log dogs, weights, and vaccines; see what's due.**
