@@ -8,7 +8,8 @@ use day-to-day.
       builds clean. _(2026-06-19)_
 - [x] Project structure: `app/`, `components/`, `lib/`, `supabase/{migrations,functions}/`;
       seed framework-free `lib/units.ts` (lbs↔kg); git initialized with initial commit. _(2026-06-19)_
-- [ ] Configure as an installable **PWA** (manifest + service worker + icons).
+- [x] Configure as an installable **PWA** (manifest + service worker + icons); shadcn/ui +
+      next-themes dark/light mode bootstrapped. _(2026-06-19)_
 - [ ] Create Supabase project; wire up env vars locally and on Vercel.
 - [ ] Scaffold `lib/supabase/` clients (browser + server).
 - [ ] Deploy a hello-world to Vercel; confirm "Add to Home Screen" works on your phone.
