@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(command -v jq)",
+      "Bash(brew list *)",
+      "Read(//usr/local/bin/**)",
+      "Bash(chmod +x *)",
+      "Bash(npm -v)",
+      "Bash(echo \"npm: $\\(npm -v 2>/dev/null || echo MISSING\\)\")",
+      "Bash(npx -v)",
+      "Bash(echo \"npx: $\\(npx -v 2>/dev/null || echo MISSING\\)\")",
+      "Bash(git --version)"
+    ]
+  }
+}
