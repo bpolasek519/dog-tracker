@@ -94,6 +94,19 @@ export async function updateDog(dogId: string, _prev: unknown, formData: FormDat
   redirect(`/dogs/${dogId}`)
 }
 
+export async function updateDogNotes(dogId: string, _prev: unknown, formData: FormData) {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('dogs')
+    .update({ notes: (formData.get('notes') as string)?.trim() || null })
+    .eq('id', dogId)
+
+  if (error) return { error: error.message }
+
+  redirect(`/dogs/${dogId}`)
+}
+
 export async function deleteDog(dogId: string) {
   const supabase = await createClient()
   const { error } = await supabase.from('dogs').delete().eq('id', dogId)

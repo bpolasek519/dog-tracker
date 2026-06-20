@@ -8,9 +8,10 @@ import { kgToLbs, roundTo } from '@/lib/units'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, differenceInYears, differenceInMonths } from 'date-fns'
 import { classifyDue } from '@/lib/vaccines'
 import BackButton from '@/components/back-button'
+import { Pencil } from 'lucide-react'
 
 type Props = { params: Promise<{ dogId: string }> }
 
@@ -42,6 +43,15 @@ export default async function DogProfilePage({ params }: Props) {
 
   const today = new Date()
 
+  function calcAge(birthdate: string): string {
+    const birth = parseISO(birthdate)
+    const years = differenceInYears(today, birth)
+    const months = differenceInMonths(today, birth) % 12
+    if (years === 0) return `${months} mo`
+    if (months === 0) return `${years} yr`
+    return `${years} yr, ${months} mo`
+  }
+
   return (
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
@@ -49,21 +59,37 @@ export default async function DogProfilePage({ params }: Props) {
           <BackButton href="/dogs" />
           <h1 className="text-xl font-semibold">{dog.name}</h1>
         </div>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/dogs/${dogId}/edit`}>Edit</Link>
-        </Button>
       </div>
 
       {/* Info */}
       <Card>
-        <CardContent className="pt-4 space-y-1 text-sm">
-          {dog.breed && <p><span className="text-muted-foreground">Breed:</span> {dog.breed}</p>}
-          {dog.sex && <p><span className="text-muted-foreground">Sex:</span> {SEX_LABELS[dog.sex] ?? dog.sex}</p>}
-          {dog.birthdate && (
-            <p><span className="text-muted-foreground">Born:</span> {format(parseISO(dog.birthdate), 'MMM d, yyyy')}</p>
-          )}
-          {dog.microchip && <p><span className="text-muted-foreground">Microchip:</span> {dog.microchip}</p>}
-          {dog.notes && <p className="text-muted-foreground italic">{dog.notes}</p>}
+        <CardContent className="pt-4">
+          <div className="flex flex-column justify-between">
+          <div className="flex gap-4 items-center">
+            <div className="shrink-0 w-20 h-20 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={dog.photo_url ?? '/dog-placeholder.svg'}
+                alt=""
+                className="w-14 h-14 text-muted-foreground"
+              />
+            </div>
+            <div className="space-y-1 text-sm">
+              {dog.breed && <p><span className="text-muted-foreground">Breed:</span> {dog.breed}</p>}
+              {dog.sex && <p><span className="text-muted-foreground">Sex:</span> {SEX_LABELS[dog.sex] ?? dog.sex}</p>}
+              {dog.birthdate && (
+                <>
+                  <p><span className="text-muted-foreground">Born:</span> {format(parseISO(dog.birthdate), 'MMM d, yyyy')}</p>
+                  <p><span className="text-muted-foreground">Age:</span> {calcAge(dog.birthdate)}</p>
+                </>
+              )}
+              {dog.microchip && <p><span className="text-muted-foreground">Microchip:</span> {dog.microchip}</p>}
+            </div>
+            </div>
+            <Button asChild variant="outline" size="icon" aria-label="Edit dog">
+              <Link href={`/dogs/${dogId}/edit`}><Pencil className="w-4 h-4" /></Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
@@ -135,6 +161,21 @@ export default async function DogProfilePage({ params }: Props) {
           ) : (
             <p className="text-muted-foreground">No vaccinations recorded yet.</p>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Notes */}
+      <Card>
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base">Notes</CardTitle>
+            <Button asChild variant="outline" size="icon" aria-label="Edit notes">
+              <Link href={`/dogs/${dogId}/notes/edit`}><Pencil className="w-4 h-4" /></Link>
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground">
+          {dog.notes ?? <span className="italic">No notes yet.</span>}
         </CardContent>
       </Card>
     </div>
