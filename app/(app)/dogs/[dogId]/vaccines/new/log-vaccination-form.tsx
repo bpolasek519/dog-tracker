@@ -121,28 +121,30 @@ export default function LogVaccinationForm({
 
       <div className="space-y-1.5">
         <Label htmlFor="given_on">Date given *</Label>
-        <Input
-          id="given_on"
-          name="given_on"
-          type="date"
-          value={givenOn}
-          onChange={(e) => handleGivenOnChange(e.target.value)}
-          required
-          className="[&::-webkit-date-and-time-value]:w-full"
-        />
+        <div className="w-full overflow-x-hidden">
+          <Input
+            id="given_on"
+            name="given_on"
+            type="date"
+            value={givenOn}
+            onChange={(e) => handleGivenOnChange(e.target.value)}
+            required
+          />
+        </div>
       </div>
 
       <div className="space-y-1.5">
         <Label htmlFor="next_due_on">Next due date</Label>
-        <Input
-          id="next_due_on"
-          name="next_due_on"
-          type="date"
-          value={nextDueOn}
-          onChange={(e) => setNextDueOn(e.target.value)}
-          placeholder="Auto-filled from vaccine interval"
-          className="[&::-webkit-date-and-time-value]:w-full"
-        />
+        <div className="w-full overflow-x-hidden">
+          <Input
+            id="next_due_on"
+            name="next_due_on"
+            type="date"
+            value={nextDueOn}
+            onChange={(e) => setNextDueOn(e.target.value)}
+            placeholder="Auto-filled from vaccine interval"
+          />
+        </div>
         {nextDueOn && (
           <p className="text-xs text-muted-foreground">
             Auto-suggested from vaccine interval — edit if needed.

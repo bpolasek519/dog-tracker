@@ -44,13 +44,14 @@ export default function WeightForm({ dogId, dogName }: { dogId: string; dogName:
 
             <div className="space-y-1.5">
               <Label htmlFor="measured_on">Date</Label>
-              <Input
-                id="measured_on"
-                name="measured_on"
-                type="date"
-                defaultValue={today}
-                className="[&::-webkit-date-and-time-value]:w-full"
-              />
+              <div className="w-full overflow-x-hidden">
+                <Input
+                  id="measured_on"
+                  name="measured_on"
+                  type="date"
+                  defaultValue={today}
+                />
+              </div>
             </div>
 
             <div className="space-y-1.5">
