@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useActionState } from 'react'
-import { addMonths } from 'date-fns'
+import { addMonths, format } from 'date-fns'
 import { logVaccination } from '@/app/actions/vaccines'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import DatePickerInput from '@/components/date-picker-input'
 
 type VaccineType = {
   id: string
@@ -31,10 +30,6 @@ type State = { error?: string } | null
 
 const CUSTOM = '__custom__'
 
-function recalcNextDue(givenOn: Date, intervalMonths: number): Date {
-  return addMonths(givenOn, intervalMonths)
-}
-
 export default function LogVaccinationForm({
   dogId,
   vaccineTypes,
@@ -46,8 +41,8 @@ export default function LogVaccinationForm({
   const [state, action, pending] = useActionState<State, FormData>(logVaccinationForDog, null)
 
   const [selectedTypeId, setSelectedTypeId] = useState<string>('')
-  const [givenOn, setGivenOn] = useState<Date | undefined>(new Date())
-  const [nextDueOn, setNextDueOn] = useState<Date | undefined>(undefined)
+  const [givenOn, setGivenOn] = useState(new Date().toISOString().slice(0, 10))
+  const [nextDueOn, setNextDueOn] = useState('')
 
   const presets = vaccineTypes.filter((v) => v.is_preset)
   const custom = vaccineTypes.filter((v) => !v.is_preset)
@@ -55,22 +50,24 @@ export default function LogVaccinationForm({
 
   function handleTypeChange(value: string) {
     setSelectedTypeId(value)
-    if (value && value !== CUSTOM && givenOn) {
+    if (value && value !== CUSTOM) {
       const type = vaccineTypes.find((v) => v.id === value)
-      if (type?.default_interval_months) {
-        setNextDueOn(recalcNextDue(givenOn, type.default_interval_months))
+      if (type?.default_interval_months && givenOn) {
+        const suggested = addMonths(new Date(givenOn), type.default_interval_months)
+        setNextDueOn(format(suggested, 'yyyy-MM-dd'))
       }
     } else {
-      setNextDueOn(undefined)
+      setNextDueOn('')
     }
   }
 
-  function handleGivenOnChange(date: Date | undefined) {
-    setGivenOn(date)
-    if (selectedTypeId && selectedTypeId !== CUSTOM && date) {
+  function handleGivenOnChange(value: string) {
+    setGivenOn(value)
+    if (selectedTypeId && selectedTypeId !== CUSTOM && value) {
       const type = vaccineTypes.find((v) => v.id === selectedTypeId)
       if (type?.default_interval_months) {
-        setNextDueOn(recalcNextDue(date, type.default_interval_months))
+        const suggested = addMonths(new Date(value), type.default_interval_months)
+        setNextDueOn(format(suggested, 'yyyy-MM-dd'))
       }
     }
   }
@@ -123,22 +120,28 @@ export default function LogVaccinationForm({
       )}
 
       <div className="space-y-1.5">
-        <Label>Date given *</Label>
-        <DatePickerInput
+        <Label htmlFor="given_on">Date given *</Label>
+        <Input
+          id="given_on"
           name="given_on"
+          type="date"
           value={givenOn}
-          onChange={handleGivenOnChange}
+          onChange={(e) => handleGivenOnChange(e.target.value)}
           required
+          className="[&::-webkit-date-and-time-value]:w-full"
         />
       </div>
 
       <div className="space-y-1.5">
-        <Label>Next due date</Label>
-        <DatePickerInput
+        <Label htmlFor="next_due_on">Next due date</Label>
+        <Input
+          id="next_due_on"
           name="next_due_on"
+          type="date"
           value={nextDueOn}
-          onChange={setNextDueOn}
-          placeholder="Pick a date (optional)"
+          onChange={(e) => setNextDueOn(e.target.value)}
+          placeholder="Auto-filled from vaccine interval"
+          className="[&::-webkit-date-and-time-value]:w-full"
         />
         {nextDueOn && (
           <p className="text-xs text-muted-foreground">

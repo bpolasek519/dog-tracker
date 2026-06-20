@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useActionState } from 'react'
+import { useActionState } from 'react'
 import { addWeight } from '@/app/actions/weights'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,14 +8,14 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent } from '@/components/ui/card'
 import BackButton from '@/components/back-button'
-import DatePickerInput from '@/components/date-picker-input'
 
 type State = { error?: string } | null
 
 export default function WeightForm({ dogId, dogName }: { dogId: string; dogName: string }) {
   const addWeightForDog = addWeight.bind(null, dogId)
   const [state, action, pending] = useActionState<State, FormData>(addWeightForDog, null)
-  const [measuredOn, setMeasuredOn] = useState<Date | undefined>(new Date())
+
+  const today = new Date().toISOString().slice(0, 10)
 
   return (
     <div className="p-4 space-y-4">
@@ -43,11 +43,13 @@ export default function WeightForm({ dogId, dogName }: { dogId: string; dogName:
             </div>
 
             <div className="space-y-1.5">
-              <Label>Date</Label>
-              <DatePickerInput
+              <Label htmlFor="measured_on">Date</Label>
+              <Input
+                id="measured_on"
                 name="measured_on"
-                value={measuredOn}
-                onChange={setMeasuredOn}
+                type="date"
+                defaultValue={today}
+                className="[&::-webkit-date-and-time-value]:w-full"
               />
             </div>
 
