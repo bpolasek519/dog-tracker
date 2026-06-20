@@ -33,7 +33,7 @@ export default async function NewVaccinationPage({ params }: Props) {
     <div className="p-4 space-y-4">
       <div className="flex items-center gap-2">
         <BackButton href={`/dogs/${dogId}/vaccines`} />
-        <h1 className="text-xl font-semibold">Log vaccination</h1>
+        <h1 className="text-xl font-semibold">Log vaccination for {dog.name}</h1>
       </div>
       <Card>
         <CardContent className="pt-4">
