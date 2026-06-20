@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import LogoutButton from '@/components/logout-button'
+import PullToRefreshMain from '@/components/pull-to-refresh-main'
 
 const NAV_ITEMS = [
   { href: '/',           label: 'Dashboard', icon: '🏠' },
@@ -34,11 +35,14 @@ export default function AppShell({
         <LogoutButton />
       </header>
 
-      <main className="flex-1 overflow-y-auto pb-20">
+      <PullToRefreshMain className="flex-1 overflow-y-auto pb-28">
         {children}
-      </main>
+      </PullToRefreshMain>
 
-      <nav className="fixed bottom-0 inset-x-0 border-t bg-background z-10">
+      <nav
+        className="fixed bottom-0 inset-x-0 border-t bg-background z-10"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
         <ul className="flex">
           {NAV_ITEMS.map(({ href, label, icon }) => {
             const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
@@ -47,13 +51,13 @@ export default function AppShell({
                 <Link
                   href={href}
                   className={cn(
-                    'flex flex-col items-center gap-0.5 py-2 text-xs font-medium transition-colors',
+                    'flex flex-col items-center gap-1 py-3.5 text-sm font-medium transition-colors',
                     active
                       ? 'text-primary'
                       : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
-                  <span className="text-lg leading-none">{icon}</span>
+                  <span className="text-2xl leading-none">{icon}</span>
                   {label}
                 </Link>
               </li>
