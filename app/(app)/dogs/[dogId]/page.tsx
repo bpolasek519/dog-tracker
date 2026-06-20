@@ -71,7 +71,7 @@ export default async function DogProfilePage({ params }: Props) {
               <img
                 src={dog.photo_url ?? '/dog-placeholder.svg'}
                 alt=""
-                className="w-14 h-14 text-muted-foreground"
+                className={dog.photo_url ? "w-full h-full object-cover" : "w-14 h-14 text-muted-foreground"}
               />
             </div>
             <div className="space-y-1 text-sm">

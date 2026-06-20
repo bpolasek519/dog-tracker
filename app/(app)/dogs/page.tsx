@@ -44,7 +44,7 @@ export default async function DogsPage() {
                         <img
                           src={dog.photo_url ?? '/dog-placeholder.svg'}
                           alt=""
-                          className="w-7 h-7 text-muted-foreground"
+                          className={dog.photo_url ? "w-full h-full object-cover" : "w-7 h-7 text-muted-foreground"}
                         />
                       </div>
                       <div>
