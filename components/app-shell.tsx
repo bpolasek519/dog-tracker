@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import LogoutButton from '@/components/logout-button'
 import PullToRefreshMain from '@/components/pull-to-refresh-main'
@@ -22,6 +23,12 @@ export default function AppShell({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const [pendingHref, setPendingHref] = useState<string | null>(null)
+
+  // Clear pending state once the route actually changes
+  useEffect(() => {
+    setPendingHref(null)
+  }, [pathname])
 
   return (
     <div className="flex flex-col min-h-full">
@@ -45,13 +52,15 @@ export default function AppShell({
       >
         <ul className="flex">
           {NAV_ITEMS.map(({ href, label, icon }) => {
-            const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
+            const isCurrent = href === '/' ? pathname === '/' : pathname.startsWith(href)
+            const active = pendingHref ? pendingHref === href : isCurrent
             return (
               <li key={href} className="flex-1">
                 <Link
                   href={href}
+                  onClick={() => { if (!isCurrent) setPendingHref(href) }}
                   className={cn(
-                    'flex flex-col items-center gap-1 py-3.5 text-sm font-medium transition-colors',
+                    'flex flex-col items-center gap-1 py-3.5 text-sm font-medium transition-colors active:scale-95 active:opacity-70',
                     active
                       ? 'text-primary'
                       : 'text-muted-foreground hover:text-foreground'

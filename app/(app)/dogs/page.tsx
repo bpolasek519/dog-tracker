@@ -38,11 +38,21 @@ export default async function DogsPage() {
               <Link href={`/dogs/${dog.id}`}>
                 <Card className="hover:bg-muted/50 transition-colors">
                   <CardContent className="py-3 px-4 flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{dog.name}</p>
-                      {dog.breed && (
-                        <p className="text-sm text-muted-foreground">{dog.breed}</p>
-                      )}
+                    <div className="flex items-center gap-3">
+                      <div className="shrink-0 w-10 h-10 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={dog.photo_url ?? '/dog-placeholder.svg'}
+                          alt=""
+                          className="w-7 h-7 text-muted-foreground"
+                        />
+                      </div>
+                      <div>
+                        <p className="font-medium">{dog.name}</p>
+                        {dog.breed && (
+                          <p className="text-sm text-muted-foreground">{dog.breed}</p>
+                        )}
+                      </div>
                     </div>
                     <span className="text-muted-foreground">›</span>
                   </CardContent>

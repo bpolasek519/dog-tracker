@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -18,6 +18,7 @@ type Dog = {
   breed: string | null
   sex: string | null
   birthdate: string | null
+  photo_url: string | null  // existing stored URL; used only for initial preview
   microchip: string | null
   notes: string | null
 }
@@ -38,6 +39,7 @@ export default function DogForm({
 }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [state, formAction, pending] = useActionState<State, FormData>(action as any, null)
+  const [photoUrl, setPhotoUrl] = useState(defaultValues?.photo_url ?? '')
 
   return (
     <form action={formAction} className="space-y-4">
@@ -55,6 +57,31 @@ export default function DogForm({
       <div className="space-y-1.5">
         <Label htmlFor="breed">Breed</Label>
         <Input id="breed" name="breed" defaultValue={defaultValues?.breed ?? ''} />
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="photo">Photo</Label>
+        <div className="flex items-center gap-3">
+          <div className="shrink-0 w-10 h-10 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={photoUrl || '/dog-placeholder.svg'}
+              alt=""
+              className="w-7 h-7 object-cover text-muted-foreground"
+            />
+          </div>
+          <Input
+            id="photo"
+            name="photo"
+            type="file"
+            accept="image/*"
+            className="cursor-pointer"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (file) setPhotoUrl(URL.createObjectURL(file))
+            }}
+          />
+        </div>
       </div>
 
       <div className="space-y-1.5">

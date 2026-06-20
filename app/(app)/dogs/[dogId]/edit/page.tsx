@@ -35,6 +35,7 @@ export default async function EditDogPage({ params }: Props) {
               breed: dog.breed,
               sex: dog.sex,
               birthdate: dog.birthdate,
+              photo_url: dog.photo_url,
               microchip: dog.microchip,
               notes: dog.notes,
             }}
