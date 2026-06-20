@@ -4,10 +4,10 @@ A private web app for tracking your dogs' health: weights, vaccines (with remind
 medications and dosing, vet visits, and records. Built as a mobile-friendly PWA so it
 works from your phone's home screen without a separate "app."
 
-Status: **Phase 0 complete.** App is live on Vercel, installable as a PWA, and has working
-email auth (sign up / log in / sign out). Supabase Postgres is wired up with a `profiles`
-table and row-level security. Starting **Phase 1** next: households, dog profiles, weights,
-vaccines, and the "Due soon" dashboard. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Status: **Phase 1 complete.** Households, dog profiles, weight logging with trend chart,
+vaccine tracking with auto next-due dates, and a color-coded "Due soon" dashboard are all
+live. Starting **Phase 2** next: medications, per-dose logging, auto-dose from weight, and
+daily email reminders. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## What it does (agreed scope)
 
@@ -57,5 +57,6 @@ npm run generate-icons  # regenerate PWA icons from public/paw.svg (run after ed
 
 ## Next step
 
-**Phase 1** — households + invites, dog profiles, weight logging (with trend chart),
-vaccine tracking with auto next-due dates, and a color-coded "Due soon" dashboard.
+**Phase 2** — medications (name, dose, frequency, mg/kg auto-dose from weight), per-dose
+logging to prevent double-dosing, and a daily email reminder job via Supabase Edge Function
++ email provider (e.g. Resend).

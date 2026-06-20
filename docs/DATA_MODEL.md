@@ -1,6 +1,6 @@
 # Dog Tracker — Data Model
 
-_Postgres (Supabase). A sketch to build from — column lists are indicative, not final._
+_Postgres (Supabase). Phase 1 tables are deployed and final. Phase 2+ entries are still a design sketch._
 
 ## Conventions
 
@@ -75,31 +75,48 @@ File bytes live in Supabase Storage; this table is metadata + access scoping.
 ## Derived: "Due soon" and reminders
 
 There is **no `reminders` table**. Due items are computed on read:
-- **Vaccines:** `vaccinations.next_due_on` within the lead window (or past = overdue), taking
-  the latest record per (dog, vaccine type).
+- **Vaccines (deployed):** `latest_vaccinations_for_household()` stored function returns the
+  most recent record per (dog, vaccine name). `lib/vaccines.ts` classifies each into
+  `overdue` / `due_soon` (within 7 days) / `upcoming`. Dashboard displays all three buckets.
 - **Medications (Phase 2):** ongoing meds and their next-dose/refill logic.
 
-The **daily email job** runs the same query server-side and emails the household anything
-within `lead_time_days`.
+The **daily email job** (Phase 2) will run the same query server-side and email the household
+anything within `lead_time_days`.
 
 ## Row-level security (RLS)
 
 Core rule: a user may read/write a row only if they belong to that row's household.
 
-Helper (pseudo-SQL):
+**Deployed helper** (`security definer`, fixed `search_path` to prevent RLS recursion):
 ```sql
-create function is_member(h uuid) returns boolean language sql stable as $$
+create function public.is_member(h uuid) returns boolean language sql stable security definer
+set search_path = '' as $$
   select exists (
-    select 1 from household_members m
+    select 1 from public.household_members m
     where m.household_id = h and m.user_id = auth.uid()
   );
 $$;
 ```
-- `households`, `dogs`, `documents`, `reminder_settings`: policy `using (is_member(household_id))`.
+
+**Deployed stored function** (atomic household + owner-membership insert, `security definer`
+so the insert doesn't self-block on RLS before the row exists):
+```sql
+create function public.create_household(p_name text) returns uuid ...
+```
+
+**Deployed dashboard function** (`latest_vaccinations_for_household`) — returns the most
+recent vaccination per (dog, vaccine name) for a household. Uses `DISTINCT ON`, which can't
+be expressed in the PostgREST fluent API, so it lives in a stored function.
+
+**Policies (deployed):**
+- `households`: members can SELECT; owner can UPDATE.
+- `household_members`: members can SELECT their household's list; owner can INSERT/UPDATE/DELETE.
+- `invites`: owner can manage; acceptance is handled server-side via admin client (bypasses RLS).
+- `dogs`, `documents`, `reminder_settings`: `using (is_member(household_id))`.
 - Child tables (`weights`, `vaccinations`, `medications`, `medication_doses`, `vet_visits`):
   policy joins up to the owning `dog`/`medication` → `dogs.household_id` → `is_member(...)`.
-- `vaccine_types`: readable if `is_preset` OR `is_member(household_id)`.
-- `invites`: the invitee accepts via `token`; acceptance inserts a `household_members` row.
+- `vaccine_types`: readable if `is_preset = true` OR `is_member(household_id)`; custom types
+  can only be inserted/updated/deleted by members of the owning household.
 
 ## Medical safety (auto-dose)
 

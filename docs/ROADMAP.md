@@ -15,17 +15,17 @@ use day-to-day.
 - [x] Deploy to Vercel; confirmed "Add to Home Screen" works on phone. _(2026-06-19)_
 - [x] Set up the `profiles` mirror + base auth (email). Google OAuth later. _(2026-06-19)_
 
-## Phase 1 — Usable MVP (vaccines + weights)
+## Phase 1 — Usable MVP (vaccines + weights) ✅
 **Goal: log dogs, weights, and vaccines; see what's due.**
-- [ ] Households: create household; `household_members`; owner role.
-- [ ] Invites: generate invite link/email; accept flow → join household.
-- [ ] RLS policies for all Phase 1 tables (verify a second account can't see your dogs).
-- [ ] Dog profiles: create/edit/list; photo upload optional.
-- [ ] Weights: add weight (lbs in, kg stored), list, **trend chart**, latest-on-profile.
-- [ ] Vaccine presets seed data + custom types.
-- [ ] Vaccinations: log given date → **auto-suggest next-due** (overridable).
-- [ ] **"Due soon" dashboard:** overdue / due-soon / upcoming, color-coded.
-- [ ] Ship + use it.
+- [x] Households: create household; `household_members`; owner role. _(2026-06-20)_
+- [x] Invites: generate invite link/email; accept flow → join household. _(2026-06-20)_
+- [x] RLS policies for all Phase 1 tables (`is_member()` helper; full policies on all tables). _(2026-06-20)_
+- [x] Dog profiles: create/edit/delete/list; photo URL field present (upload deferred). _(2026-06-20)_
+- [x] Weights: add weight (lbs in, kg stored), list, **trend chart** (Recharts), latest-on-profile. _(2026-06-20)_
+- [x] Vaccine presets seed data (7 built-in types) + custom types per household. _(2026-06-20)_
+- [x] Vaccinations: log given date → **auto-suggest next-due** (overridable). _(2026-06-20)_
+- [x] **"Due soon" dashboard:** overdue / due-soon / upcoming, color-coded. _(2026-06-20)_
+- [x] Ship + use it. _(2026-06-20)_
 
 ## Phase 2 — Medications + email reminders
 **Goal: manage meds and stop missing things even when the app is closed.**

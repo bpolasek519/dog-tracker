@@ -11,7 +11,7 @@ npm run lint            # ESLint check
 npm run generate-icons  # Regenerate PWA icons from public/paw.svg (uses sharp)
 ```
 
-No test suite is configured yet (Phase 1+).
+No test suite is configured yet (Phase 2+).
 
 ## Architecture
 
@@ -21,8 +21,11 @@ No test suite is configured yet (Phase 1+).
 
 **Key architectural layers:**
 - `app/` — Next.js App Router pages, server actions, and route handlers
+- `app/actions/` — Server Actions for dogs, weights, vaccines, and household/invite operations
 - `components/` — React UI components; shadcn/ui components go in `components/ui/`
-- `lib/` — Framework-free business logic; `lib/units.ts` (lbs ↔ kg), `lib/utils.ts` (`cn()` helper)
+- `components/app-shell.tsx` — App chrome: header + bottom tab nav (Dashboard / Dogs / Household)
+- `lib/` — Framework-free business logic; `lib/units.ts` (lbs ↔ kg), `lib/utils.ts` (`cn()` helper), `lib/vaccines.ts` (due-date logic)
+- `lib/db/` — Typed Supabase query helpers (dogs, weights, vaccines); keeps DB calls out of page files
 - `supabase/migrations/` — SQL DDL + RLS policies (applied via Supabase CLI)
 - `supabase/functions/` — Deno edge functions (cron jobs, webhooks)
 - `scripts/` — Node.js dev scripts (excluded from ESLint; use CommonJS `require`)
@@ -30,7 +33,7 @@ No test suite is configured yet (Phase 1+).
 **Supabase client usage:**
 - Browser / Client Components: `createClient()` from `lib/supabase/client.ts` — uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - Server Components / Server Actions / Route Handlers: `createClient()` from `lib/supabase/server.ts` — session-aware via cookies, RLS still applies
-- Secret key (`SUPABASE_SECRET_KEY`) is wired in `.env` / Vercel env vars for future admin operations that need to bypass RLS; not yet used in code
+- Admin/service client: `lib/supabase/admin.ts` uses `SUPABASE_SECRET_KEY` to bypass RLS — currently used by the `acceptInvite` server action (must write `household_members` before the invitee has a session). Never import this from a Client Component
 
 **API keys:** Using Supabase's new non-JWT key format (`sb_publishable_...` / `sb_secret_...`). The legacy `anon` and `service_role` JWT keys are not used. Exception: Supabase Edge Functions (Phase 2 cron) only support JWT verification — when we add those, we'll need the legacy `service_role` key as an additional env var.
 
@@ -52,7 +55,7 @@ shadcn/ui is configured (`components.json`). Add components with:
 ```bash
 npx shadcn@latest add <component>   # e.g. button, card, dialog
 ```
-Components land in `components/ui/`. Use the `cn()` helper from `lib/utils.ts` for conditional class merging. Dark/light mode is handled by `next-themes` via `components/theme-provider.tsx` — theme toggle component to be added in Phase 1.
+Components land in `components/ui/`. Use the `cn()` helper from `lib/utils.ts` for conditional class merging. Dark/light mode is handled by `next-themes` via `components/theme-provider.tsx`.
 
 ## PWA Icons
 
@@ -60,4 +63,4 @@ Icon source is `public/paw.svg`. After editing the SVG, run `npm run generate-ic
 
 ## Project Status
 
-**Phase 0 is complete.** Supabase project live, email auth working, `profiles` table + trigger deployed, app running on Vercel, PWA installable on phone. Phase 1 (households, dogs, weights, vaccines, "Due soon" dashboard) is next. See `docs/ROADMAP.md`.
+**Phase 1 is complete.** All Phase 1 tables deployed with RLS (`households`, `household_members`, `invites`, `dogs`, `weights`, `vaccine_types`, `vaccinations`). Full UI is live: dog CRUD, weight logging + Recharts trend chart, vaccination logging with auto next-due, household invite flow (generate link / accept / revoke), onboarding, and a color-coded "Due soon" dashboard. Phase 2 (medications, per-dose logging, auto-dose from weight, daily email reminders via Edge Function + Resend) is next. See `docs/ROADMAP.md`.
